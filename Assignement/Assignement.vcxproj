@@ -142,16 +142,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\Downloads\3dworld\3dworld\3dworld.cpp" />
-    <ClCompile Include="..\..\..\..\Downloads\3dworld\3dworld\Basic.cpp" />
-    <ClCompile Include="..\..\..\..\Downloads\3dworld\3dworld\ObjLoader.cpp" />
-    <ClCompile Include="..\..\..\..\Downloads\3dworld\3dworld\Polyhedron.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\..\..\Downloads\3dworld\3dworld\Basic.h" />
-    <ClInclude Include="..\..\..\..\Downloads\3dworld\3dworld\ObjLoader.h" />
-    <ClInclude Include="..\..\..\..\Downloads\3dworld\3dworld\Polyhedron.h" />
-    <ClInclude Include="..\..\..\..\Downloads\3dworld\3dworld\Vector.h" />
+    <ClCompile Include="intro.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
