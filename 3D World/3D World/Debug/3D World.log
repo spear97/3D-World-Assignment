@@ -1,0 +1,15 @@
+﻿  3dworld.cpp
+C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\3dworld.cpp(31,46): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\3dworld.cpp(40,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\3dworld.cpp(167,31): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\3dworld.cpp(167,21): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+  Basic.cpp
+  ObjLoader.cpp
+C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\ObjLoader.cpp(82,17): warning C4018: '<': signed/unsigned mismatch
+C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\ObjLoader.cpp(87,17): warning C4018: '<': signed/unsigned mismatch
+C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\ObjLoader.cpp(91,17): warning C4018: '<': signed/unsigned mismatch
+C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\ObjLoader.cpp(95,17): warning C4018: '<': signed/unsigned mismatch
+C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\ObjLoader.cpp(98,19): warning C4018: '<': signed/unsigned mismatch
+  Polyhedron.cpp
+  Generating Code...
+  3D World.vcxproj -> C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\Debug\3D World.exe
