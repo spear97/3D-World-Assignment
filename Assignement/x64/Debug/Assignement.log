@@ -1,0 +1,10 @@
+﻿  3dworld.cpp
+C:\Users\seanp\Downloads\3dworld\3dworld\3dworld.cpp(31,46): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+C:\Users\seanp\Downloads\3dworld\3dworld\3dworld.cpp(40,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\seanp\Downloads\3dworld\3dworld\3dworld.cpp(167,31): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\seanp\Downloads\3dworld\3dworld\3dworld.cpp(167,21): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+  Basic.cpp
+  ObjLoader.cpp
+  Polyhedron.cpp
+  Generating Code...
+  Assignement.vcxproj -> C:\Users\seanp\Documents\Github\3D-World-Assignment\x64\Debug\Assignement.exe
