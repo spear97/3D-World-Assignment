@@ -11,5 +11,6 @@ C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\ObjLoader.
 C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\ObjLoader.cpp(95,17): warning C4018: '<': signed/unsigned mismatch
 C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\ObjLoader.cpp(98,19): warning C4018: '<': signed/unsigned mismatch
   Polyhedron.cpp
+C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\Polyhedron.cpp(31,20): warning C4018: '<': signed/unsigned mismatch
   Generating Code...
   3D World.vcxproj -> C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\Debug\3D World.exe

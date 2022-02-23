@@ -25,8 +25,20 @@ Polyhedron::Polyhedron(const Polyhedron& other) {
   faces = other.faces;
 }
 
-void Polyhedron::Recenter() {
-  //TODO 
+void Polyhedron::Recenter() 
+{
+	Vector3d sum(0, 0, 0);
+	for (int i = 0; i < verts.size(); i++)
+	{
+		sum += verts[i];
+	}
+	cout << "sum = " << sum << endl;
+	Vector3d modelledCenter = sum / (1.0 * verts.size());
+	cout << "modelledCenter = " << modelledCenter << endl;
+
+	//Loop through verts
+	//for eah v in verts
+	//	v -= modelledCenter
 }
 
 void Polyhedron::RecenterXZ() {
