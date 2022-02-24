@@ -2,14 +2,16 @@
 
 #include "Polyhedron.h"
 
-
-Polyhedron::Polyhedron(string _fname, Vector3d _c, double _rotY, Vector3d _clr) : ObjLoader(_fname) {
+//Constructor for Polyhedron
+Polyhedron::Polyhedron(string _fname, Vector3d _c, double _rotY, Vector3d _clr) : ObjLoader(_fname) 
+{
   //cout << "Polyhedron constructor. " << endl;
   center = _c;
   rotY = _rotY;
   color = _clr;
 }
 
+//Overloading Constructor for Polyhedron
 Polyhedron::Polyhedron(const Polyhedron& other) {
   //cout << "Polyhedron copy constructor. " << endl;
   center = other.center;
@@ -25,6 +27,7 @@ Polyhedron::Polyhedron(const Polyhedron& other) {
   faces = other.faces;
 }
 
+//Recenter Polyhedron 
 void Polyhedron::Recenter() 
 {
 	Vector3d sum(0, 0, 0);
@@ -41,10 +44,12 @@ void Polyhedron::Recenter()
 	//	v -= modelledCenter
 }
 
+//Recenter Polyhedron values at X-Axis and Y-Axis
 void Polyhedron::RecenterXZ() {
   //TODO 
 }
 
+//Render the Polyhedron
 void Polyhedron::Draw() {
   //TODO 
   //cout << "Polyhedron::Draw color = " << color << endl;

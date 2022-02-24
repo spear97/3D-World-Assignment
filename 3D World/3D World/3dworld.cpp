@@ -15,29 +15,39 @@ using namespace std;
 
 #include "Polyhedron.h"
 
+//Collection of polygons for a given object
 vector<Polyhedron> polys;
 
 // angle of rotation for the camera direction
 float angle = 0.0f;
+
 // actual vector representing the camera's direction
 float lx=0.0f,lz=-1.0f;
+
 // XZ position of the camera
 float x=0.0f, z=5.0f;
-// the key states. These variables will be zero
-//when no key is being presses
+
+// the key states. These variables will be zero when no key is being presses
 float deltaAngle = 0.0f;
 float deltaMove = 0;
 
-GLfloat light_diffuse[] = {0.8, 0.8, 0.8, 0.9};  /* Red diffuse light. */
-GLfloat light_position[] = {1.0, 1.0, 1.0, 0.0};  /* Infinite light location. */
+/* Red diffuse light. */
+GLfloat light_diffuse[] = {0.8, 0.8, 0.8, 0.9};  
 
-void changeSize(int w, int h) {
+/* Infinite light location. */
+GLfloat light_position[] = {1.0, 1.0, 1.0, 0.0}; 
+
+//Update the Size of the Window
+void changeSize(int w, int h) 
+{
 
   // Prevent a divide by zero, when window is too short
   // (you cant make a window of zero width).
-  if (h == 0)
-    h = 1;
-  float ratio =  w * 1.0 / h;
+    if (h == 0)
+    {
+        h = 1;
+    }
+    float ratio = w * 1.0 / h;
 
   // Use the Projection Matrix
   glMatrixMode(GL_PROJECTION);
@@ -55,13 +65,13 @@ void changeSize(int w, int h) {
   glMatrixMode(GL_MODELVIEW);
 }
 
-void drawSnowMan() {
-
+//Draw a 3-Dimensional SnowMan 
+void drawSnowMan() 
+{
   //glColor3f(1.0f, 1.0f, 1.0f);
   glColor3f(1.0f, 0.0f, 0.0f);
 
   // Draw Body
-
   glTranslatef(0.0f ,0.75f, 0.0f);
   glutSolidSphere(0.75f,20,20);
 
@@ -84,20 +94,32 @@ void drawSnowMan() {
   glutSolidCone(0.08f,0.5f,10,2);
 }
 
-void computePos(float deltaMove) {
-
+//Coputer Position for X and Z
+void computePos(float deltaMove) 
+{
+  //Calculate the value for X
   x += deltaMove * lx * 0.2f;
+
+  //Calculate the value for Z
   z += deltaMove * lz * 0.2f;
 }
 
-void computeDir(float deltaAngle) {
-
+//Compute Direction 
+void computeDir(float deltaAngle) 
+{
+  //Calculate the value for angle
   angle += deltaAngle;
+
+  //Calculate the value for lx
   lx = sin(angle);
+
+  //Calculate the value for lz
   lz = -cos(angle);
 }
 
-void init() {
+//Initialize Environment Parameters
+void init() 
+{
   GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
   GLfloat mat_shininess[] = { 50.0 };
   glClearColor (1.0, 1.0, 1.0, 1.0);
@@ -111,11 +133,13 @@ void init() {
   glLightfv(GL_LIGHT0, GL_POSITION, light_position);
   glEnable(GL_LIGHTING);
   glEnable(GL_LIGHT0);
+
   /* Use depth buffering for hidden surface elimination. */
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_NORMALIZE);
 }
 
+//Initialize a Polyhedron
 void initPolyhedron() {
   //TODO
   /*
@@ -127,87 +151,145 @@ void initPolyhedron() {
   */ 
 }
 
-void loadFromFile(string filename) {
+//Load a File from a given filename
+void loadFromFile(string filename) 
+{
   //TODO
 }
 
+//Render a Given Scene
 void renderScene(void) {
 
-  if (deltaMove)
-    computePos(deltaMove);
-  if (deltaAngle)
-    computeDir(deltaAngle);
-
-  // Clear Color and Depth Buffers
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-  // Reset transformations
-  glLoadIdentity();
-  // Set the camera
-  gluLookAt(	x, 1.0f, z,
-      x+lx, 1.0f,  z+lz,
-      0.0f, 1.0f,  0.0f);
-
-  // Draw ground
-
-  glColor3f(0.9f, 0.9f, 0.9f);
-  glBegin(GL_QUADS);
-  glVertex3f(-100.0f, 0.0f, -100.0f);
-  glVertex3f(-100.0f, 0.0f,  100.0f);
-  glVertex3f( 100.0f, 0.0f,  100.0f);
-  glVertex3f( 100.0f, 0.0f, -100.0f);
-  glEnd();
-
-  // Draw 36 SnowMen
-
-  if(1)
-  for(int i = -3; i < 3; i++)
-    for(int j=-3; j < 3; j++) {
-      glPushMatrix();
-      glTranslatef(i*10.0,0,j * 10.0);
-      drawSnowMan();
-      glPopMatrix();
+    //If there is a Position Change
+    if (deltaMove)
+    {
+        computePos(deltaMove);
     }
 
-  for(int i=0; i<(int)polys.size(); i++) {
+    //If there is an Angle Chage
+    if (deltaAngle)
+    {
+        computeDir(deltaAngle);
+    }
+
+    // Clear Color and Depth Buffers
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // Reset transformations
+    glLoadIdentity();
+
+    // Set the camera
+    gluLookAt(x, 1.0f, z, x+lx, 1.0f, z+lz, 0.0f, 1.0f,  0.0f);
+
+    // Draw ground
+    glColor3f(0.9f, 0.9f, 0.9f);
+    glBegin(GL_QUADS);
+    glVertex3f(-100.0f, 0.0f, -100.0f);
+    glVertex3f(-100.0f, 0.0f,  100.0f);
+    glVertex3f( 100.0f, 0.0f,  100.0f);
+    glVertex3f( 100.0f, 0.0f, -100.0f);
+    glEnd();
+
+    //Draw 36 SnowMen
+    if (1)
+    {
+        for (int i = -3; i < 3; i++)
+        {
+            for (int j = -3; j < 3; j++)
+            {
+                glPushMatrix();
+                glTranslatef(i * 10.0, 0, j * 10.0);
+                drawSnowMan();
+                glPopMatrix();
+            }
+        }
+    }
+       
+  //Draw Polygons
+  for(int i=0; i<(int)polys.size(); i++) 
+  {
     polys[i].Draw();
   }
 
+  //Update to the current frame
   glutSwapBuffers();
 }
 
-
+//When a Key is pressed determine what needs to be done
 void pressKey(int key, int xx, int yy) {
+    
+  //Determine which key has been pressed
+  switch (key) 
+  {
+    //On Left Key Pressed, turn Camera to the left
+    case GLUT_KEY_LEFT: 
+        deltaAngle = -0.01f; 
+        break;
 
-  switch (key) {
-    case GLUT_KEY_LEFT : deltaAngle = -0.01f; break;
-    case GLUT_KEY_RIGHT : deltaAngle = 0.01f; break;
-    case GLUT_KEY_UP : deltaMove = 0.5f; break;
-    case GLUT_KEY_DOWN : deltaMove = -0.5f; break;
+    //On Right Key Pressed, turn Camera to the Right
+    case GLUT_KEY_RIGHT: 
+        deltaAngle = 0.01f; 
+        break;
+
+    //On Up Key Pressed, move Camera forward
+    case GLUT_KEY_UP: 
+        deltaMove = 0.5f; 
+        break;
+
+    //On Down Key Pressed, turn Camera backward
+    case GLUT_KEY_DOWN: 
+        deltaMove = -0.5f; 
+        break;
   }
 }
 
+//When a Key is released determine what needs to be done
 void releaseKey(int key, int x, int y) {
 
-  switch (key) {
-    case GLUT_KEY_LEFT :
-    case GLUT_KEY_RIGHT : deltaAngle = 0.0f;break;
-    case GLUT_KEY_UP :
-    case GLUT_KEY_DOWN : deltaMove = 0;break;
+  //Determine which key has been released
+  switch (key) 
+  {
+    //On Left Key Pressed, set deltaAngle to 0
+    case GLUT_KEY_LEFT:
+        deltaAngle = 0.f;
+        break;
+
+    //On Right Key Pressed, set deltaAngle to 0
+    case GLUT_KEY_RIGHT: 
+        deltaAngle = 0.f;
+        break;
+
+    //On Up Key Pressed, set deltaMove to 0
+    case GLUT_KEY_UP:
+        deltaMove = 0.f;
+        break;
+
+    //On Down Key Pressed, set deltaMove to 0
+    case GLUT_KEY_DOWN: 
+        deltaMove = 0.f;
+        break;
   }
 }
 
-
+//When a Key is released determine what needs to be done
 void keyboard(unsigned char key, int x, int y)
 {
   switch (key) {
+    
+    //Kill Program
     case 'q':
-    case 27:             // ESCAPE key
-      exit (0);
+        exit(0);
+        break;
+
+    //Kill Program
+    // ESCAPE key
+    case 27:            
+      exit(0);
       break;
   }
 }
 
+//Main Driver
 int main(int argc, char **argv) {
 
   // init GLUT and create window

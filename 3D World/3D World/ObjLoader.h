@@ -9,23 +9,24 @@ using namespace mathtool;
 #include <iostream>
 using namespace std;
 
-struct Face {
-  //int id1, id2, id3; //indices into v
-  //int t_id1, t_id2, t_id3; //indices into vt
-  //int n_id1, n_id2, n_id3; //indices into vn
-  void Print() {
+struct Face 
+{
+  void Print() 
+  {
     cout << "face ids: ";
     for(int i=0; i<(int)ids.size(); i++) 
-      cout << ids[i] << " ";
+    {
+        cout << ids[i] << " ";
+    }
     cout << endl;
   }
   vector<int> ids;
   vector<int> texIds;
   vector<int> normalIds;
-
 };
 
-class ObjLoader {
+class ObjLoader 
+{
 public:
   ObjLoader() { }
   ObjLoader(string _fname) { filename = _fname; }
