@@ -5,7 +5,6 @@
 //Constructor for Polyhedron
 Polyhedron::Polyhedron(string _fname, Vector3d _c, double _rotY, Vector3d _clr) : ObjLoader(_fname) 
 {
-  //cout << "Polyhedron constructor. " << endl;
   center = _c;
   rotY = _rotY;
   color = _clr;
@@ -18,6 +17,7 @@ Polyhedron::Polyhedron(const Polyhedron& other) {
   rotY = other.rotY;
   color = other.color;
   filename = other.filename;
+
   //////////////////////////////////////////////////////////
   //other data from obj loader
 
@@ -35,8 +35,15 @@ void Polyhedron::Recenter()
 	{
 		sum += verts[i];
 	}
-	cout << "sum = " << sum << endl;
 	Vector3d modelledCenter = sum / (1.0 * verts.size());
+	Vector3d avg = modelledCenter / verts.size();
+
+	for (int i = 0; i < verts.size(); i++)
+	{
+		sum += verts[i];
+	}
+	cout << "sum = " << sum << endl;
+
 	cout << "modelledCenter = " << modelledCenter << endl;
 
 	//Loop through verts
@@ -53,4 +60,15 @@ void Polyhedron::RecenterXZ() {
 void Polyhedron::Draw() {
   //TODO 
   //cout << "Polyhedron::Draw color = " << color << endl;
+	glColor3d(color.GetX(), color.GetY(), color.GetZ());
+	glPushMatrix();
+	glTranslated(center.GetX(), center.GetY(), center.GetZ());
+	glPointSize(4.0);
+	glBegin(GL_POINTS);
+	for (int i = 0; i < verts.size(); i++)
+	{
+		glVertex3d(verts[i].GetX(), verts[i].GetY(), verts[i].GetZ());
+	}
+	glEnd();
+	glPopMatrix();
 }

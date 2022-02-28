@@ -142,13 +142,11 @@ void init()
 //Initialize a Polyhedron
 void initPolyhedron() {
   //TODO
-  /*
   Polyhedron p1("models/cube.obj", Vector3d(-5,5,0), 0, Vector3d(1,0,0));
   p1.Load();
   p1.Recenter();
   p1.Print();
   polys.push_back(p1);
-  */ 
 }
 
 //Load a File from a given filename
