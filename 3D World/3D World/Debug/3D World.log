@@ -1,18 +1,5 @@
-﻿  3dworld.cpp
-C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\3dworld.cpp(35,46): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
-C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\3dworld.cpp(50,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\3dworld.cpp(199,45): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\3dworld.cpp(199,32): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-  Basic.cpp
-  ObjLoader.cpp
-C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\ObjLoader.cpp(179,17): warning C4018: '<': signed/unsigned mismatch
-C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\ObjLoader.cpp(189,17): warning C4018: '<': signed/unsigned mismatch
-C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\ObjLoader.cpp(198,17): warning C4018: '<': signed/unsigned mismatch
-C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\ObjLoader.cpp(207,17): warning C4018: '<': signed/unsigned mismatch
-C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\ObjLoader.cpp(214,19): warning C4018: '<': signed/unsigned mismatch
-  Polyhedron.cpp
-C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\Polyhedron.cpp(34,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\Polyhedron.cpp(41,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\Polyhedron.cpp(66,20): warning C4018: '<': signed/unsigned mismatch
-  Generating Code...
+﻿  Polyhedron.cpp
+C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\Polyhedron.cpp(35,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\Polyhedron.cpp(42,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\Polyhedron.cpp(61,20): warning C4018: '<': signed/unsigned mismatch
   3D World.vcxproj -> C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\Debug\3D World.exe

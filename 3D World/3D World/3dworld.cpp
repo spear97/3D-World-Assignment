@@ -59,7 +59,7 @@ void changeSize(int w, int h)
   glViewport(0, 0, w, h);
 
   // Set the correct perspective.
-  gluPerspective(45.0f, ratio, 0.1f, 100.0f);
+  gluPerspective(45.0f, ratio, 0.1f, 1000.0f);
 
   // Get Back to the Modelview
   glMatrixMode(GL_MODELVIEW);
@@ -189,7 +189,7 @@ void renderScene(void) {
     glEnd();
 
     //Draw 36 SnowMen
-    if (1)
+    if (0)
     {
         for (int i = -3; i < 3; i++)
         {
@@ -221,22 +221,22 @@ void pressKey(int key, int xx, int yy) {
   {
     //On Left Key Pressed, turn Camera to the left
     case GLUT_KEY_LEFT: 
-        deltaAngle = -0.01f; 
+        deltaAngle = -0.001f; 
         break;
 
     //On Right Key Pressed, turn Camera to the Right
     case GLUT_KEY_RIGHT: 
-        deltaAngle = 0.01f; 
+        deltaAngle = 0.001f; 
         break;
 
     //On Up Key Pressed, move Camera forward
     case GLUT_KEY_UP: 
-        deltaMove = 0.5f; 
+        deltaMove = 0.05f; 
         break;
 
     //On Down Key Pressed, turn Camera backward
     case GLUT_KEY_DOWN: 
-        deltaMove = -0.5f; 
+        deltaMove = -0.05f; 
         break;
   }
 }
