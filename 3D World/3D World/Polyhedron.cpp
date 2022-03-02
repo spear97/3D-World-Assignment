@@ -67,22 +67,27 @@ void Polyhedron::RecenterXZ()
 }
 
 //Render the Polyhedron
-void Polyhedron::Draw() {
-  //TODO 
-  //cout << "Polyhedron::Draw color = " << color << endl;
+void Polyhedron::Draw() 
+{
+	//Allow for Triangles to Render
 	glColor3d(color.GetX(), color.GetY(), color.GetZ());
 	glPushMatrix();
 	glTranslated(center.GetX(), center.GetY(), center.GetZ());
+
+	//Generate Triangles
 	glBegin(GL_TRIANGLES);
 	for (int i = 0; i < faces.size(); i++)
 	{
-		//faces[i].Print();
+		//Ids of Textures for Vertices
 		int& id1 = faces[i].ids[0];
 		int& id2 = faces[i].ids[1];
 		int& id3 = faces[i].ids[2];
+		
+		//Ids of Normals for Shading of Triangles
 		int& nid1 = faces[i].normalIds[0];
 		int& nid2 = faces[i].normalIds[1];
 		int& nid3 = faces[i].normalIds[2];
+
 		glNormal3d(vns[nid1 - 1].GetX(), vns[nid1 - 1].GetY(), vns[nid1 - 1].GetZ());
 		glVertex3d(verts[id1 - 1].GetX(), verts[id1 - 1].GetY(), verts[id1 - 1].GetZ());
 		glNormal3d(vns[nid2 - 1].GetX(), vns[nid2 - 1].GetY(), vns[nid2 - 1].GetZ());
