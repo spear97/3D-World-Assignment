@@ -31,6 +31,9 @@ float x=0.0f, z=5.0f;
 float deltaAngle = 0.0f;
 float deltaMove = 0;
 
+static int submenu_id;
+static int menu_id;
+
 /* Red diffuse light. */
 GLfloat light_diffuse[] = {0.8, 0.8, 0.8, 0.9};  
 
@@ -285,6 +288,22 @@ void keyboard(unsigned char key, int x, int y)
       exit(0);
       break;
   }
+}
+
+void menu(int num)
+{
+    switch (num)
+    {
+    default: 
+        return;
+    }
+}
+
+void createMenu(void)
+{
+    submenu_id = glutCreateMenu(menu);
+    glutAddMenuEntry("Basic Cube", 2);
+    menu_id = glutCreateMenu(menu);
 }
 
 //Main Driver
