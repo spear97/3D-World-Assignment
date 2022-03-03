@@ -48,21 +48,18 @@ void Polyhedron::Recenter()
 //Recenter Polyhedron values at X-Axis and Z-Axis
 void Polyhedron::RecenterXZ() 
 {
-	//TODO
 	Vector3d sum(0, center.GetY(), 0);
 	Vector3d modelledCenter = sum / (1.0 * verts.size());
 	for (int i = 0; i < verts.size(); i++)
 	{
 		modelledCenter += verts[i];
-		modelledCenter = Vector3d(modelledCenter.GetX(), center.GetY(), modelledCenter.GetZ());
 	}
 
 	Vector3d avg = modelledCenter / verts.size();
 
 	for (int i = 0; i < verts.size(); i++)
 	{
-		verts[i] -= avg;
-		verts[i] = Vector3d(verts[i].GetX(), center.GetY(), verts[i].GetZ());
+
 	}
 }
 

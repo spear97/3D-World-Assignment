@@ -1,0 +1,11 @@
+﻿  3dworld.cpp
+C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\3dworld.cpp(38,46): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\3dworld.cpp(53,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\3dworld.cpp(212,45): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\3dworld.cpp(212,32): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+  Generating code
+  2 of 536 functions ( 0.4%) were compiled, the rest were copied from previous compilation.
+    1 functions were new in current compilation
+    1 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  3D World.vcxproj -> C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\Release\3D World.exe

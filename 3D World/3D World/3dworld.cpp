@@ -145,17 +145,34 @@ void init()
 //Initialize a Polyhedron
 void initPolyhedron() {
   //TODO
-  Polyhedron p1("models/cube.obj", Vector3d(-5,5,0), 0, Vector3d(1,0,0));
+  Polyhedron p1("models/Wukong.obj", Vector3d(0,1.5,0), 0, Vector3d(1,0,0));
   p1.Load();
   p1.Recenter();
-  p1.Print();
+  //p1.Print();
   polys.push_back(p1);
 }
 
 //Load a File from a given filename
 void loadFromFile(string filename) 
 {
-  //TODO
+  Polyhedron p1(filename, Vector3d(0, 1.5, 0), 0, Vector3d(1, 0, 0));
+  p1.Load();
+  p1.Recenter();
+  //p1.Print();
+  polys.push_back(p1);
+}
+
+//Draw the Ground that Exists in the Scene
+void DrawGround()
+{
+    // Draw ground
+    glColor3f(0.9f, 0.9f, 0.9f);
+    glBegin(GL_QUADS);
+    glVertex3f(-100.0f, 0.0f, -100.0f);
+    glVertex3f(-100.0f, 0.0f, 100.0f);
+    glVertex3f(100.0f, 0.0f, 100.0f);
+    glVertex3f(100.0f, 0.0f, -100.0f);
+    glEnd();
 }
 
 //Render a Given Scene
@@ -183,13 +200,7 @@ void renderScene(void) {
     gluLookAt(x, 1.0f, z, x+lx, 1.0f, z+lz, 0.0f, 1.0f,  0.0f);
 
     // Draw ground
-    glColor3f(0.9f, 0.9f, 0.9f);
-    glBegin(GL_QUADS);
-    glVertex3f(-100.0f, 0.0f, -100.0f);
-    glVertex3f(-100.0f, 0.0f,  100.0f);
-    glVertex3f( 100.0f, 0.0f,  100.0f);
-    glVertex3f( 100.0f, 0.0f, -100.0f);
-    glEnd();
+    DrawGround();
 
     //Draw 36 SnowMen
     if (0)
@@ -294,16 +305,34 @@ void menu(int num)
 {
     switch (num)
     {
-    default: 
-        return;
+    case 0:
+        exit(0);
+    case 1:
+        polys.clear();
+        break;
+    case 2:
+        loadFromFile("models/cube.obj");
+        break;
+    case 3:
+        break;
+    case 4:
+        break;
     }
+
+    glutPostRedisplay();
 }
 
 void createMenu(void)
 {
     submenu_id = glutCreateMenu(menu);
     glutAddMenuEntry("Basic Cube", 2);
+    glutAddMenuEntry("Cloud Grid", 3);
+    glutAddMenuEntry("SnowPeople", 4);
     menu_id = glutCreateMenu(menu);
+    glutAddMenuEntry("Clear", 1);
+    glutAddSubMenu("Draw", submenu_id);
+    glutAddMenuEntry("Quit", 0);
+    glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 
 //Main Driver
@@ -331,7 +360,9 @@ int main(int argc, char **argv) {
   // OpenGL init
   glEnable(GL_DEPTH_TEST);
   init();
-  initPolyhedron();
+  //initPolyhedron();
+  createMenu();
+
   // enter GLUT event processing cycle
   glutMainLoop();
 

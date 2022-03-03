@@ -1,8 +1,8 @@
 ﻿  3dworld.cpp
-C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\3dworld.cpp(35,46): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
-C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\3dworld.cpp(50,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\3dworld.cpp(199,45): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\3dworld.cpp(199,32): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\3dworld.cpp(38,46): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\3dworld.cpp(53,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\3dworld.cpp(202,45): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\3dworld.cpp(202,32): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
   Basic.cpp
   ObjLoader.cpp
 C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\ObjLoader.cpp(90,17): warning C4018: '<': signed/unsigned mismatch
