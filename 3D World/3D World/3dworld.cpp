@@ -11,6 +11,7 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include <tuple>
 using namespace std;
 
 #include "Polyhedron.h"
@@ -27,18 +28,38 @@ float lx=0.0f,lz=-1.0f;
 // XZ position of the camera
 float x=0.0f, z=5.0f;
 
+//The Bounds that the Ground Exist on
+float minBound = -100.f, maxBound = 100.f;
+
 // the key states. These variables will be zero when no key is being presses
 float deltaAngle = 0.0f;
 float deltaMove = 0;
 
-static int submenu_id;
+//The ids that will be used to navigate through the menu for spawn Renders
+static int submenu_Draw_id;
+static int submenu_Scene_id;
 static int menu_id;
+
+//Determine if Default should be rendered or not
+bool useDefault = true;
+
+//Determine if Objects have already been generated in the Scene or Not
+bool alreadyGenerate = false;
+
+//The Identifier for the Environment that will need to be rendered
+int Env_ID;
 
 /* Red diffuse light. */
 GLfloat light_diffuse[] = {0.8, 0.8, 0.8, 0.9};  
 
 /* Infinite light location. */
 GLfloat light_position[] = {1.0, 1.0, 1.0, 0.0}; 
+
+//Get a Random Value in range
+double RandRange(double min, double max)
+{
+    return min + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (max - min)));
+}
 
 //Update the Size of the Window
 void changeSize(int w, int h) 
@@ -66,35 +87,6 @@ void changeSize(int w, int h)
 
   // Get Back to the Modelview
   glMatrixMode(GL_MODELVIEW);
-}
-
-//Draw a 3-Dimensional SnowMan 
-void drawSnowMan() 
-{
-  //glColor3f(1.0f, 1.0f, 1.0f);
-  glColor3f(1.0f, 0.0f, 0.0f);
-
-  // Draw Body
-  glTranslatef(0.0f ,0.75f, 0.0f);
-  glutSolidSphere(0.75f,20,20);
-
-  // Draw Head
-  glTranslatef(0.0f, 1.0f, 0.0f);
-  glutSolidSphere(0.25f,20,20);
-
-  // Draw Eyes
-  glPushMatrix();
-  glColor3f(0.0f,0.0f,0.0f);
-  glTranslatef(0.05f, 0.10f, 0.18f);
-  glutSolidSphere(0.05f,10,10);
-  glTranslatef(-0.1f, 0.0f, 0.0f);
-  glutSolidSphere(0.05f,10,10);
-  glPopMatrix();
-
-  // Draw Nose
-  glColor3f(1.0f, 0.5f , 0.5f);
-  glRotatef(0.0f,1.0f, 0.0f, 0.0f);
-  glutSolidCone(0.08f,0.5f,10,2);
 }
 
 //Coputer Position for X and Z
@@ -142,10 +134,9 @@ void init()
   glEnable(GL_NORMALIZE);
 }
 
-//Initialize a Polyhedron
+//Initialize a Polyhedron Already Loaded into a Scene
 void initPolyhedron() {
-  //TODO
-  Polyhedron p1("models/Wukong.obj", Vector3d(0,1.5,0), 0, Vector3d(1,0,0));
+  Polyhedron p1("models/Pyramid.obj", Vector3d(0,0,0), 0, Vector3d(1,1,0));
   p1.Load();
   p1.Recenter();
   //p1.Print();
@@ -153,40 +144,371 @@ void initPolyhedron() {
 }
 
 //Load a File from a given filename
-void loadFromFile(string filename) 
+void loadFromFile(string filename, Vector3d center, double rot, Vector3d color) 
 {
-  Polyhedron p1(filename, Vector3d(0, 1.5, 0), 0, Vector3d(1, 0, 0));
+  Polyhedron p1(filename, center, rot, color);
   p1.Load();
   p1.Recenter();
   //p1.Print();
   polys.push_back(p1);
 }
 
-//Draw the Ground that Exists in the Scene
-void DrawGround()
+//Draw a 3-Dimensional SnowMan 
+/*void drawSnowMan()
 {
-    // Draw ground
-    glColor3f(0.9f, 0.9f, 0.9f);
+    //glColor3f(1.0f, 1.0f, 1.0f);
+    glColor3f(1.0f, 0.0f, 0.0f);
+
+    // Draw Body
+    glTranslatef(0.0f, 0.75f, 0.0f);
+    glutSolidSphere(0.75f, 20, 20);
+
+    // Draw Head
+    glTranslatef(0.0f, 1.0f, 0.0f);
+    glutSolidSphere(0.25f, 20, 20);
+
+    // Draw Eyes
+    glPushMatrix();
+    glColor3f(0.0f, 0.0f, 0.0f);
+    glTranslatef(0.05f, 0.10f, 0.18f);
+    glutSolidSphere(0.05f, 10, 10);
+    glTranslatef(-0.1f, 0.0f, 0.0f);
+    glutSolidSphere(0.05f, 10, 10);
+    glPopMatrix();
+
+    // Draw Nose
+    glColor3f(1.0f, 0.5f, 0.5f);
+    glRotatef(0.0f, 1.0f, 0.0f, 0.0f);
+    glutSolidCone(0.08f, 0.5f, 10, 2);
+}
+
+//Draw 36 Snowmen
+void Draw36Snowmen()
+{
+    for (int i = -3; i < 3; i++)
+    {
+        for (int j = -3; j < 3; j++)
+        {
+            glPushMatrix();
+            glTranslatef(i * 10.0, 0, j * 10.0);
+            drawSnowMan();
+            glPopMatrix();
+        }
+    }
+}*/
+
+//What needs to be rendered for Environemnt1
+void Environment1()
+{
+    glColor3f(0.f, 1.f, 0.f);
     glBegin(GL_QUADS);
-    glVertex3f(-100.0f, 0.0f, -100.0f);
-    glVertex3f(-100.0f, 0.0f, 100.0f);
-    glVertex3f(100.0f, 0.0f, 100.0f);
-    glVertex3f(100.0f, 0.0f, -100.0f);
+    glVertex3f(minBound, 0.0f, minBound);
+    glVertex3f(minBound, 0.0f, maxBound);
+    glVertex3f(maxBound, 0.0f, maxBound);
+    glVertex3f(maxBound, 0.0f, minBound);
+    glEnd();
+
+    //Verify if Objects have already been generated or not
+    if (!alreadyGenerate)
+    {
+        alreadyGenerate = true;
+        for (int i = 0; i < 10; i++)
+        {
+            switch (i)
+            {
+            case 0: //Cacti
+                for (int j = 0; j < 4; j++)
+                {
+                    double x = RandRange(minBound, maxBound), z = RandRange(minBound, maxBound);
+                    loadFromFile("models/Cactus.obj", Vector3d(x, 0.5f, z), 0, Vector3d(0.f, 1.f, 0.f));
+                }
+                break;
+            case 1: //Rocks
+                for (int j = 0; j < 4; j++)
+                {
+                    double x = RandRange(minBound, maxBound), z = RandRange(minBound, maxBound);
+                    loadFromFile("models/RockSmallBAlt.obj", Vector3d(x, 0.5f, z), 0, Vector3d(0.5f, 0.5f, 0.5f));
+                }
+                break;
+            case 2: //Grass
+                for (int j = 0; j < 4; j++)
+                {
+                    double x = RandRange(minBound, maxBound), z = RandRange(minBound, maxBound);
+                    loadFromFile("models/Grass.obj", Vector3d(x, 0.25f, z), 0, Vector3d(0.f, 1.f, 0.f));
+                }
+                break;
+            case 3: //PalmTree
+                for (int j = 0; j < 4; j++)
+                {
+                    double x = RandRange(minBound, maxBound), z = RandRange(minBound, maxBound);
+                    loadFromFile("models/PalmTreeTrunk.obj", Vector3d(x, 0.25f, z), 0, Vector3d(0.588f, 0.294f, 0.f));
+                    loadFromFile("models/PalmTreeTop.obj", Vector3d(x, 2.25f, z), 0, Vector3d(0.f, 1.f, 0.f));
+                }
+                break;
+            case 4: //tree4
+                for (int j = 0; j < 4; j++)
+                {
+                    double x = RandRange(minBound, maxBound), z = RandRange(minBound, maxBound);
+                    loadFromFile("models/tree4.obj", Vector3d(x, 2.5f, z), 0, Vector3d(0.588f, 0.294f, 0.f));
+                }
+                break;
+            case 5: //stone2_L
+                for (int j = 0; j < 4; j++)
+                {
+                    double x = RandRange(minBound, maxBound), z = RandRange(minBound, maxBound);
+                    loadFromFile("models/stone2_L.obj", Vector3d(x, 0.f, z), 0, Vector3d(0.5f, 0.5f, 0.5f));
+                }
+                break;
+            case 6: //stone1_S
+                for (int j = 0; j < 4; j++)
+                {
+                    double x = RandRange(minBound, maxBound), z = RandRange(minBound, maxBound);
+                    loadFromFile("models/stone1_S.obj", Vector3d(x, 0.f, z), 0, Vector3d(0.75f, 0.75f, 0.75f));
+                }
+                break;
+            case 7: //stone1_M
+                for (int j = 0; j < 4; j++)
+                {
+                    double x = RandRange(minBound, maxBound), z = RandRange(minBound, maxBound);
+                    loadFromFile("models/stone1_M.obj", Vector3d(x, 0.f, z), 0, Vector3d(0.75f, 0.75f, 0.75f));
+                }
+                break;
+            case 8: //stone2_L2-scaled
+                for (int j = 0; j < 4; j++)
+                {
+                    double x = RandRange(minBound, maxBound), z = RandRange(minBound, maxBound);
+                    loadFromFile("models/stone2_L2-scaled.obj", Vector3d(x, 0.f, z), 0, Vector3d(0.75f, 0.75f, 0.75f));
+                }
+                break;
+            case 9: //PalmTreeTrunk
+                for (int j = 0; j < 4; j++)
+                {
+                    double x = RandRange(minBound, maxBound), z = RandRange(minBound, maxBound);
+                    loadFromFile("models/PalmTreeTrunk.obj", Vector3d(x, 0.25f, z), 0, Vector3d(0.588f, 0.294f, 0.f));
+                }
+                break;
+            }
+        }
+    }
+}
+
+//What needs to be rendered for Environemnt1
+void Environment2()
+{
+    glColor3f(0.588f, 0.294f, 0.f);
+    glBegin(GL_QUADS);
+    glVertex3f(minBound, 0.0f, minBound);
+    glVertex3f(minBound, 0.0f, maxBound);
+    glVertex3f(maxBound, 0.0f, maxBound);
+    glVertex3f(maxBound, 0.0f, minBound);
+    glEnd();
+
+
+    //Verify if Objects have already been generated or not
+    if (!alreadyGenerate)
+    {
+        alreadyGenerate = true;
+        for (int i = 0; i < 10; i++)
+        {
+            switch (i)
+            {
+            case 0: //Cacti
+                for (int j = 0; j < 4; j++)
+                {
+                    double x = RandRange(minBound, maxBound), z = RandRange(minBound, maxBound);
+                    loadFromFile("models/Cactus.obj", Vector3d(x, 0.5f, z), 0, Vector3d(0.f, 1.f, 0.f));
+                }
+                break;
+            case 1: //Rocks
+                for (int j = 0; j < 4; j++)
+                {
+                    double x = RandRange(minBound, maxBound), z = RandRange(minBound, maxBound);
+                    loadFromFile("models/RockSmallBAlt.obj", Vector3d(x, 0.5f, z), 0, Vector3d(0.5f, 0.5f, 0.5f));
+                }
+                break;
+            case 2: //Grass
+                for (int j = 0; j < 4; j++)
+                {
+                    double x = RandRange(minBound, maxBound), z = RandRange(minBound, maxBound);
+                    loadFromFile("models/Grass.obj", Vector3d(x, 0.25f, z), 0, Vector3d(0.f, 1.f, 0.f));
+                }
+                break;
+            case 3: //PalmTree
+                for (int j = 0; j < 4; j++)
+                {
+                    double x = RandRange(minBound, maxBound), z = RandRange(minBound, maxBound);
+                    loadFromFile("models/PalmTreeTrunk.obj", Vector3d(x, 0.25f, z), 0, Vector3d(0.588f, 0.294f, 0.f));
+                    loadFromFile("models/PalmTreeTop.obj", Vector3d(x, 2.25f, z), 0, Vector3d(0.f, 1.f, 0.f));
+                }
+                break;
+            case 4: //tree4
+                for (int j = 0; j < 4; j++)
+                {
+                    double x = RandRange(minBound, maxBound), z = RandRange(minBound, maxBound);
+                    loadFromFile("models/tree4.obj", Vector3d(x, 2.5f, z), 0, Vector3d(0.588f, 0.294f, 0.f));
+                }
+                break;
+            case 5: //stone2_L
+                for (int j = 0; j < 4; j++)
+                {
+                    double x = RandRange(minBound, maxBound), z = RandRange(minBound, maxBound);
+                    loadFromFile("models/stone2_L.obj", Vector3d(x, 0.f, z), 0, Vector3d(0.5f, 0.5f, 0.5f));
+                }
+                break;
+            case 6: //stone1_S
+                for (int j = 0; j < 4; j++)
+                {
+                    double x = RandRange(minBound, maxBound), z = RandRange(minBound, maxBound);
+                    loadFromFile("models/stone1_S.obj", Vector3d(x, 0.f, z), 0, Vector3d(0.75f, 0.75f, 0.75f));
+                }
+                break;
+            case 7: //stone1_M
+                for (int j = 0; j < 4; j++)
+                {
+                    double x = RandRange(minBound, maxBound), z = RandRange(minBound, maxBound);
+                    loadFromFile("models/stone1_M.obj", Vector3d(x, 0.f, z), 0, Vector3d(0.75f, 0.75f, 0.75f));
+                }
+                break;
+            case 8: //stone2_L2-scaled
+                for (int j = 0; j < 4; j++)
+                {
+                    double x = RandRange(minBound, maxBound), z = RandRange(minBound, maxBound);
+                    loadFromFile("models/stone2_L2-scaled.obj", Vector3d(x, 0.f, z), 0, Vector3d(0.75f, 0.75f, 0.75f));
+                }
+                break;
+            case 9: //Military Vehicles
+                for (int j = 0; j < 4; j++)
+                {
+                    double x = RandRange(minBound, maxBound), z = RandRange(minBound, maxBound);
+                    loadFromFile("models/MilitaryVehicle.obj", Vector3d(x, 0.21f, z), 0, Vector3d(0.75f, 0.75f, 0.75f));
+                }
+                break;
+            }
+        }
+    }
+}
+
+//What needs to be rendered for Environemnt1
+void Environment3()
+{
+    glColor3f(0.761f, 0.698f, 0.502f);
+    glBegin(GL_QUADS);
+    glVertex3f(minBound, 0.0f, minBound);
+    glVertex3f(minBound, 0.0f, maxBound);
+    glVertex3f(maxBound, 0.0f, maxBound);
+    glVertex3f(maxBound, 0.0f, minBound);
+    glEnd();
+
+    //Verify if Objects have already been generated or not
+    if (!alreadyGenerate)
+    {
+        alreadyGenerate = true;
+        for (int i = 0; i < 10; i++)
+        {
+            switch (i)
+            {
+            case 0: //Cacti
+                for (int j = 0; j < 4; j++)
+                {
+                    double x = RandRange(minBound, maxBound), z = RandRange(minBound, maxBound);
+                    loadFromFile("models/Cactus.obj", Vector3d(x, 0.5f, z), 0, Vector3d(0.f, 1.f, 0.f));
+                }
+                break;
+            case 1: //Rocks
+                for (int j = 0; j < 4; j++)
+                {
+                    double x = RandRange(minBound, maxBound), z = RandRange(minBound, maxBound);
+                    loadFromFile("models/RockSmallBAlt.obj", Vector3d(x, 0.5f, z), 0, Vector3d(0.5f, 0.5f, 0.5f));
+                }
+                break;
+            case 2: //Grass
+                for (int j = 0; j < 4; j++)
+                {
+                    double x = RandRange(minBound, maxBound), z = RandRange(minBound, maxBound);
+                    loadFromFile("models/Grass.obj", Vector3d(x, 0.25f, z), 0, Vector3d(0.f, 1.f, 0.f));
+                }
+                break;
+            case 3: //PalmTree
+                for (int j = 0; j < 4; j++)
+                {
+                    double x = RandRange(minBound, maxBound), z = RandRange(minBound, maxBound);
+                    loadFromFile("models/PalmTreeTrunk.obj", Vector3d(x, 0.25f, z), 0, Vector3d(0.588f, 0.294f, 0.f));
+                    loadFromFile("models/PalmTreeTop.obj", Vector3d(x, 2.25f, z), 0, Vector3d(0.f, 1.f, 0.f));
+                }
+                break;
+            case 4: //tree4
+                for (int j = 0; j < 4; j++)
+                {
+                    double x = RandRange(minBound, maxBound), z = RandRange(minBound, maxBound);
+                    loadFromFile("models/tree4.obj", Vector3d(x, 2.5f, z), 0, Vector3d(0.588f, 0.294f, 0.f));
+                }
+                break;
+            case 5: //stone2_L
+                for (int j = 0; j < 4; j++)
+                {
+                    double x = RandRange(minBound, maxBound), z = RandRange(minBound, maxBound);
+                    loadFromFile("models/stone2_L.obj", Vector3d(x, 0.f, z), 0, Vector3d(0.5f, 0.5f, 0.5f));
+                }
+                break;
+            case 6: //stone1_S
+                for (int j = 0; j < 4; j++)
+                {
+                    double x = RandRange(minBound, maxBound), z = RandRange(minBound, maxBound);
+                    loadFromFile("models/stone1_S.obj", Vector3d(x, 0.f, z), 0, Vector3d(0.75f, 0.75f, 0.75f));
+                }
+                break;
+            case 7: //stone1_M
+                for (int j = 0; j < 4; j++)
+                {
+                    double x = RandRange(minBound, maxBound), z = RandRange(minBound, maxBound);
+                    loadFromFile("models/stone1_M.obj", Vector3d(x, 0.f, z), 0, Vector3d(0.75f, 0.75f, 0.75f));
+                }
+                break;
+            case 8: //stone2_L2-scaled
+                for (int j = 0; j < 4; j++)
+                {
+                    double x = RandRange(minBound, maxBound), z = RandRange(minBound, maxBound);
+                    loadFromFile("models/stone2_L2-scaled.obj", Vector3d(x, 0.f, z), 0, Vector3d(0.75f, 0.75f, 0.75f));
+                }
+                break;
+            case 9: //PalmTreeTrunk
+                for (int j = 0; j < 4; j++)
+                {
+                    double x = RandRange(minBound, maxBound), z = RandRange(minBound, maxBound);
+                    loadFromFile("models/PalmTreeTrunk.obj", Vector3d(x, 0.25f, z), 0, Vector3d(0.588f, 0.294f, 0.f));
+                }
+                break;
+            }
+        }
+    }
+}
+
+//What needs to be rendered for the Default Environment
+void DefaultEnvironment()
+{
+    glColor3f(0.85f, 0.85f, 0.85f);
+    glBegin(GL_QUADS);
+    glVertex3f(minBound, 0.0f, minBound);
+    glVertex3f(minBound, 0.0f, maxBound);
+    glVertex3f(maxBound, 0.0f, maxBound);
+    glVertex3f(maxBound, 0.0f, minBound);
     glEnd();
 }
 
-//Render a Given Scene
+//Render changes to the current Scene
 void renderScene(void) {
 
     //If there is a Position Change
     if (deltaMove)
     {
+        //TODO: Generate Vector3d Object Based on Postion 
         computePos(deltaMove);
     }
 
     //If there is an Angle Chage
     if (deltaAngle)
     {
+        //TODO: Generate Vector3d Object Based on Rotation 
         computeDir(deltaAngle);
     }
 
@@ -199,21 +521,25 @@ void renderScene(void) {
     // Set the camera
     gluLookAt(x, 1.0f, z, x+lx, 1.0f, z+lz, 0.0f, 1.0f,  0.0f);
 
-    // Draw ground
-    DrawGround();
-
-    //Draw 36 SnowMen
-    if (0)
+    //Render Environment Based on User Selection
+    if (useDefault) //Default - Rendering
     {
-        for (int i = -3; i < 3; i++)
+        DefaultEnvironment();
+    }
+    else
+    {
+        switch (Env_ID)
         {
-            for (int j = -3; j < 3; j++)
-            {
-                glPushMatrix();
-                glTranslatef(i * 10.0, 0, j * 10.0);
-                drawSnowMan();
-                glPopMatrix();
-            }
+        case 0: //Environment 1 - Rendering
+            Environment1();
+            break;
+        case 1: //Environment 2 - Rendering
+            Environment2();
+            break;
+
+        case 2: //Environment 3 - Rendering
+            Environment3();
+            break;
         }
     }
        
@@ -301,6 +627,7 @@ void keyboard(unsigned char key, int x, int y)
   }
 }
 
+//Menu for Program to perform different Events
 void menu(int num)
 {
     switch (num)
@@ -308,29 +635,89 @@ void menu(int num)
     case 0:
         exit(0);
     case 1:
-        polys.clear();
+        if (!polys.empty())
+        {
+            polys.clear();
+            initPolyhedron();
+        }
         break;
     case 2:
-        loadFromFile("models/cube.obj");
+        loadFromFile("models/Grass.obj", Vector3d(x+lx, 0.5f, z+lz), 0, Vector3d(0.f, 1.f, 0.f));
         break;
     case 3:
+        loadFromFile("models/Wukong.obj", Vector3d(x+lx, 1.5f, z+lz), 0, Vector3d(0.75f, 0.75f, 0.75f));
         break;
     case 4:
+        loadFromFile("models/MilitaryVehicle.obj", Vector3d(x+lx, 0.21f, z+lz), 0, Vector3d(0.75f, 0.75f, 0.75f));
+        break;
+    case 5:
+        loadFromFile("models/patrick.obj", Vector3d(x+lx, 0.5f, z+lz), 0, Vector3d(1.f, 0.753f, 0.796f));
+        break;
+    case 6:
+        loadFromFile("models/Sonic.obj", Vector3d(x+lx, 0.5f, z+lz), 0, Vector3d(0.f, 0.f, 1.f));
+        break;
+    case 7:
+        if (!polys.empty())
+        {
+            polys.clear();
+        }
+        alreadyGenerate = false;
+        initPolyhedron();
+        useDefault = false;
+        Env_ID = 0;
+        break;
+    case 8:
+        if (!polys.empty())
+        {
+            polys.clear();
+        }
+        alreadyGenerate = false;
+        initPolyhedron();
+        useDefault = false;
+        Env_ID = 1;
+        break;
+    case 9:
+        if (!polys.empty())
+        {
+            polys.clear();
+        }
+        alreadyGenerate = false;
+        initPolyhedron();
+        useDefault = false;
+        Env_ID = 2;
+        break;
+    case 10:
+        if (!polys.empty())
+        {
+            polys.clear();
+        }
+        alreadyGenerate = false;
+        initPolyhedron();
+        useDefault = true;
         break;
     }
 
     glutPostRedisplay();
 }
 
+//Render Menu for Progrma
 void createMenu(void)
 {
-    submenu_id = glutCreateMenu(menu);
-    glutAddMenuEntry("Basic Cube", 2);
-    glutAddMenuEntry("Cloud Grid", 3);
-    glutAddMenuEntry("SnowPeople", 4);
+    submenu_Draw_id = glutCreateMenu(menu);
+    glutAddMenuEntry("Grass", 2);
+    glutAddMenuEntry("Wukong", 3);
+    glutAddMenuEntry("Military Vehicle", 4);
+    glutAddMenuEntry("Patrick", 5);
+    glutAddMenuEntry("Sonic", 6);
+    submenu_Scene_id = glutCreateMenu(menu);
+    glutAddMenuEntry("Scene 1", 7);
+    glutAddMenuEntry("Scene 2", 8);
+    glutAddMenuEntry("Scene 3", 9);
+    glutAddMenuEntry("Default Scene", 10);
     menu_id = glutCreateMenu(menu);
     glutAddMenuEntry("Clear", 1);
-    glutAddSubMenu("Draw", submenu_id);
+    glutAddSubMenu("Draw", submenu_Draw_id);
+    glutAddSubMenu("Environments", submenu_Scene_id);
     glutAddMenuEntry("Quit", 0);
     glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
@@ -360,7 +747,7 @@ int main(int argc, char **argv) {
   // OpenGL init
   glEnable(GL_DEPTH_TEST);
   init();
-  //initPolyhedron();
+  initPolyhedron();
   createMenu();
 
   // enter GLUT event processing cycle

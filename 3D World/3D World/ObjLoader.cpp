@@ -8,7 +8,7 @@ void ObjLoader::Load() {
         cout << "Cannot load. empty file name!" << endl;
         exit(-1);
     }
-    cout << "ObjLoader::Loading file: " << filename << endl;
+    //cout << "ObjLoader::Loading file: " << filename << endl;
     ifstream infile;
     infile.open(filename.c_str());
     string stmp;
@@ -74,7 +74,7 @@ void ObjLoader::Load() {
         }
     }
     infile.close();
-    cout << "-done! ObjLoader::Loading file: " << filename << endl;
+    //cout << "-done! ObjLoader::Loading file: " << filename << endl;
 }
 
 //Output Object information

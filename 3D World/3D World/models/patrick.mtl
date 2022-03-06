@@ -1,0 +1,61 @@
+# Material file for patrick.obj
+
+newmtl MatD3D01
+	Ns 0
+	d 1
+	illum 2
+	Kd 1.0 1.0 1.0
+	Ks 0.0 0.0 0.0
+	Ka 0.0 0.0 0.0
+	map_Kd patrick_high0.png
+
+newmtl steering
+	Ns 0
+	d 1
+	illum 2
+	Kd 0.8 0.8 0.8
+	Ks 0.0 0.0 0.0
+	Ka 0.2 0.2 0.2
+	map_Kd patrick_high1.png
+
+newmtl wheels
+	Ns 0
+	d 1
+	illum 2
+	Kd 0.8 0.8 0.8
+	Ks 0.0 0.0 0.0
+	Ka 0.2 0.2 0.2
+	map_Kd wheel.png
+
+newmtl Material_1
+	Ns 8
+	d 1
+	illum 2
+	Kd 0.0 0.0 1.0
+	Ks 0.0 0.0 0.0
+	Ka 0.2 0.2 0.2
+
+newmtl Material_2
+	Ns 8
+	d 1
+	illum 2
+	Kd 0.0 0.0 1.0
+	Ks 0.0 0.0 0.0
+	Ka 0.2 0.2 0.2
+
+newmtl Material_3
+	Ns 8
+	d 1
+	illum 2
+	Kd 0.0 0.0 1.0
+	Ks 0.0 0.0 0.0
+	Ka 0.2 0.2 0.2
+
+newmtl Material_4
+	Ns 8
+	d 1
+	illum 2
+	Kd 0.0 0.0 1.0
+	Ks 0.0 0.0 0.0
+	Ka 0.2 0.2 0.2
+

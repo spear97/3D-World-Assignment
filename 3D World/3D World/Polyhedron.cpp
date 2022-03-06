@@ -59,7 +59,8 @@ void Polyhedron::RecenterXZ()
 
 	for (int i = 0; i < verts.size(); i++)
 	{
-
+		verts[i] = Vector3d(verts[i].GetX(), center.GetY(), verts[i].GetZ());
+		verts[i] -= avg;
 	}
 }
 
