@@ -1,16 +1,9 @@
 ﻿  3dworld.cpp
-C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\3dworld.cpp(67,46): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
-C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\3dworld.cpp(88,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\3dworld.cpp(147,20): warning C4018: '<': signed/unsigned mismatch
-  Polyhedron.cpp
-C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\Polyhedron.cpp(35,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\Polyhedron.cpp(42,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\Polyhedron.cpp(53,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\Polyhedron.cpp(60,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\Polyhedron.cpp(77,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\3dworld.cpp(60,46): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\3D World\3dworld.cpp(81,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
   Generating code
-  60 of 549 functions (10.9%) were compiled, the rest were copied from previous compilation.
-    4 functions were new in current compilation
-    34 functions had inline decision re-evaluated but remain unchanged
+  38 of 539 functions ( 7.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    7 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   3D World.vcxproj -> C:\Users\seanp\Documents\Github\3D-World-Assignment\3D World\Release\3D World.exe

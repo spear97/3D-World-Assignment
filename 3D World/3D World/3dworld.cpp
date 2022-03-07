@@ -146,7 +146,6 @@ void initPolyhedron() {
   Polyhedron p1("models/Pyramid.obj", Vector3d(0,0,0), 0, Vector3d(1,1,0));
   p1.Load();
   p1.Recenter();
-  //p1.Print();
   polys.push_back(p1);
 }
 
@@ -156,7 +155,6 @@ void loadFromFile(string filename, Vector3d center, double rot, Vector3d color)
   Polyhedron p1(filename, center, rot, color);
   p1.Load();
   p1.Recenter();
-  //p1.Print();
   polys.push_back(p1);
 }
 
