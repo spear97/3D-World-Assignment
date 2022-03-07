@@ -38,6 +38,7 @@ float deltaMove = 0;
 //The ids that will be used to navigate through the menu for spawn Renders
 static int submenu_Draw_id;
 static int submenu_Scene_id;
+static int submenu_CamSpeed_id;
 static int menu_id;
 
 //Determine if Default should be rendered or not
@@ -45,6 +46,12 @@ bool useDefault = true;
 
 //Determine if Objects have already been generated in the Scene or Not
 bool alreadyGenerate = false;
+
+//Determine if a Simulation is running
+bool isSimulating = false;
+
+//Determine if Camera needs to be slowed down
+bool slowDown = false;
 
 //The Identifier for the Environment that will need to be rendered
 int Env_ID;
@@ -58,7 +65,7 @@ GLfloat light_position[] = {1.0, 1.0, 1.0, 0.0};
 //Get a Random Value in range
 double RandRange(double min, double max)
 {
-    return min + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (max - min)));
+    return min + static_cast <double> (rand()) / (static_cast <double> (RAND_MAX / (max - min)));
 }
 
 //Update the Size of the Window
@@ -153,50 +160,6 @@ void loadFromFile(string filename, Vector3d center, double rot, Vector3d color)
   polys.push_back(p1);
 }
 
-//Draw a 3-Dimensional SnowMan 
-/*void drawSnowMan()
-{
-    //glColor3f(1.0f, 1.0f, 1.0f);
-    glColor3f(1.0f, 0.0f, 0.0f);
-
-    // Draw Body
-    glTranslatef(0.0f, 0.75f, 0.0f);
-    glutSolidSphere(0.75f, 20, 20);
-
-    // Draw Head
-    glTranslatef(0.0f, 1.0f, 0.0f);
-    glutSolidSphere(0.25f, 20, 20);
-
-    // Draw Eyes
-    glPushMatrix();
-    glColor3f(0.0f, 0.0f, 0.0f);
-    glTranslatef(0.05f, 0.10f, 0.18f);
-    glutSolidSphere(0.05f, 10, 10);
-    glTranslatef(-0.1f, 0.0f, 0.0f);
-    glutSolidSphere(0.05f, 10, 10);
-    glPopMatrix();
-
-    // Draw Nose
-    glColor3f(1.0f, 0.5f, 0.5f);
-    glRotatef(0.0f, 1.0f, 0.0f, 0.0f);
-    glutSolidCone(0.08f, 0.5f, 10, 2);
-}
-
-//Draw 36 Snowmen
-void Draw36Snowmen()
-{
-    for (int i = -3; i < 3; i++)
-    {
-        for (int j = -3; j < 3; j++)
-        {
-            glPushMatrix();
-            glTranslatef(i * 10.0, 0, j * 10.0);
-            drawSnowMan();
-            glPopMatrix();
-        }
-    }
-}*/
-
 //What needs to be rendered for Environemnt1
 void Environment1()
 {
@@ -216,11 +179,12 @@ void Environment1()
         {
             switch (i)
             {
-            case 0: //Cacti
+            case 0: //Grass Patch
                 for (int j = 0; j < 4; j++)
                 {
                     double x = RandRange(minBound, maxBound), z = RandRange(minBound, maxBound);
-                    loadFromFile("models/Cactus.obj", Vector3d(x, 0.5f, z), 0, Vector3d(0.f, 1.f, 0.f));
+                    loadFromFile("models/Grass.obj", Vector3d(x, 0.25f, z), 0, Vector3d(0.f, 1.f, 0.f));
+                    loadFromFile("models/Grass.obj", Vector3d(x+1, 0.25f, z), 0, Vector3d(0.f, 1.f, 0.f));
                 }
                 break;
             case 1: //Rocks
@@ -237,19 +201,19 @@ void Environment1()
                     loadFromFile("models/Grass.obj", Vector3d(x, 0.25f, z), 0, Vector3d(0.f, 1.f, 0.f));
                 }
                 break;
-            case 3: //PalmTree
+            case 3: //Military Vehicle
                 for (int j = 0; j < 4; j++)
                 {
                     double x = RandRange(minBound, maxBound), z = RandRange(minBound, maxBound);
-                    loadFromFile("models/PalmTreeTrunk.obj", Vector3d(x, 0.25f, z), 0, Vector3d(0.588f, 0.294f, 0.f));
-                    loadFromFile("models/PalmTreeTop.obj", Vector3d(x, 2.25f, z), 0, Vector3d(0.f, 1.f, 0.f));
+                    loadFromFile("models/MilitaryVehicle.obj", Vector3d(x, 0.25f, z), 0, Vector3d(0.588f, 0.294f, 0.f));
                 }
                 break;
             case 4: //tree4
                 for (int j = 0; j < 4; j++)
                 {
                     double x = RandRange(minBound, maxBound), z = RandRange(minBound, maxBound);
-                    loadFromFile("models/tree4.obj", Vector3d(x, 2.5f, z), 0, Vector3d(0.588f, 0.294f, 0.f));
+                    loadFromFile("models/tree4.obj", Vector3d(x, 0.25f, z), 0, Vector3d(0.588f, 0.294f, 0.f));
+                    loadFromFile("models/tree4-top.obj", Vector3d(x, 4.25f, z), 0, Vector3d(0.f, 1.f, 0.f));
                 }
                 break;
             case 5: //stone2_L
@@ -284,7 +248,8 @@ void Environment1()
                 for (int j = 0; j < 4; j++)
                 {
                     double x = RandRange(minBound, maxBound), z = RandRange(minBound, maxBound);
-                    loadFromFile("models/PalmTreeTrunk.obj", Vector3d(x, 0.25f, z), 0, Vector3d(0.588f, 0.294f, 0.f));
+                    loadFromFile("models/tree4.obj", Vector3d(x, 0.25f, z), 0, Vector3d(0.588f, 0.294f, 0.f));
+                    loadFromFile("models/tree4-top.obj", Vector3d(x, 0.25f, z), 0, Vector3d(0.f, 1.f, 0.f));
                 }
                 break;
             }
@@ -312,11 +277,11 @@ void Environment2()
         {
             switch (i)
             {
-            case 0: //Cacti
+            case 0: //Bush
                 for (int j = 0; j < 4; j++)
                 {
                     double x = RandRange(minBound, maxBound), z = RandRange(minBound, maxBound);
-                    loadFromFile("models/Cactus.obj", Vector3d(x, 0.5f, z), 0, Vector3d(0.f, 1.f, 0.f));
+                    loadFromFile("models/tree4-top.obj", Vector3d(x, 0.25f, z), 0, Vector3d(0.f, 1.f, 0.f));
                 }
                 break;
             case 1: //Rocks
@@ -333,12 +298,12 @@ void Environment2()
                     loadFromFile("models/Grass.obj", Vector3d(x, 0.25f, z), 0, Vector3d(0.f, 1.f, 0.f));
                 }
                 break;
-            case 3: //PalmTree
+            case 3: //Tree
                 for (int j = 0; j < 4; j++)
                 {
                     double x = RandRange(minBound, maxBound), z = RandRange(minBound, maxBound);
-                    loadFromFile("models/PalmTreeTrunk.obj", Vector3d(x, 0.25f, z), 0, Vector3d(0.588f, 0.294f, 0.f));
-                    loadFromFile("models/PalmTreeTop.obj", Vector3d(x, 2.25f, z), 0, Vector3d(0.f, 1.f, 0.f));
+                    loadFromFile("models/tree4.obj", Vector3d(x, 0.25f, z), 0, Vector3d(0.588f, 0.294f, 0.f));
+                    loadFromFile("models/tree4-top.obj", Vector3d(x, 4.25f, z), 0, Vector3d(0.f, 1.f, 0.f));
                 }
                 break;
             case 4: //tree4
@@ -542,7 +507,7 @@ void renderScene(void) {
             break;
         }
     }
-       
+
   //Draw Polygons
   for(int i=0; i<(int)polys.size(); i++) 
   {
@@ -561,22 +526,50 @@ void pressKey(int key, int xx, int yy) {
   {
     //On Left Key Pressed, turn Camera to the left
     case GLUT_KEY_LEFT: 
-        deltaAngle = -0.001f; 
+        if (slowDown)
+        {
+            deltaAngle = -0.0001f;
+        }
+        else
+        {
+            deltaAngle = -0.001f;
+        }
         break;
 
     //On Right Key Pressed, turn Camera to the Right
     case GLUT_KEY_RIGHT: 
-        deltaAngle = 0.001f; 
+        if (slowDown)
+        {
+            deltaAngle = 0.0001f;
+        }
+        else
+        {
+            deltaAngle = 0.001f;
+        }
         break;
 
     //On Up Key Pressed, move Camera forward
     case GLUT_KEY_UP: 
-        deltaMove = 0.05f; 
+        if (slowDown)
+        {
+            deltaMove = 0.005f;
+        }
+        else
+        {
+            deltaMove = 0.05f;
+        }
         break;
 
     //On Down Key Pressed, turn Camera backward
     case GLUT_KEY_DOWN: 
-        deltaMove = -0.05f; 
+        if (slowDown)
+        {
+            deltaMove = -0.005f;
+        }
+        else
+        {
+            deltaMove = -0.05f;
+        }
         break;
   }
 }
@@ -695,6 +688,18 @@ void menu(int num)
         initPolyhedron();
         useDefault = true;
         break;
+    case 11:
+        if (slowDown)
+        {
+            slowDown = false;
+        }
+        break;
+    case 12:
+        if (!slowDown)
+        {
+            slowDown = true;
+        }
+        break;
     }
 
     glutPostRedisplay();
@@ -714,10 +719,14 @@ void createMenu(void)
     glutAddMenuEntry("Scene 2", 8);
     glutAddMenuEntry("Scene 3", 9);
     glutAddMenuEntry("Default Scene", 10);
+    submenu_CamSpeed_id = glutCreateMenu(menu);
+    glutAddMenuEntry("Fast", 11);
+    glutAddMenuEntry("Slow", 12);
     menu_id = glutCreateMenu(menu);
     glutAddMenuEntry("Clear", 1);
     glutAddSubMenu("Draw", submenu_Draw_id);
     glutAddSubMenu("Environments", submenu_Scene_id);
+    glutAddSubMenu("Camera Speed", submenu_CamSpeed_id);
     glutAddMenuEntry("Quit", 0);
     glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
