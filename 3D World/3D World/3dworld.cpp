@@ -19,6 +19,9 @@ using namespace std;
 //Collection of polygons for a given object
 vector<Polyhedron> polys;
 
+//
+vector<Polyhedron> movingObj;
+
 // angle of rotation for the camera direction
 float angle = 0.0f;
 
@@ -39,6 +42,7 @@ float deltaMove = 0;
 static int submenu_Draw_id;
 static int submenu_Scene_id;
 static int submenu_CamSpeed_id;
+static int submenu_Sim_id;
 static int menu_id;
 
 //Determine if Default should be rendered or not
@@ -458,6 +462,29 @@ void DefaultEnvironment()
     glEnd();
 }
 
+void MakeSonic()
+{
+    Polyhedron P("models/Sonic.obj", Vector3d(0.f, 0.3f, 5.f), 0, Vector3d(0.f, 0.f, 1.f));
+    P.Load();
+    P.Recenter();
+    movingObj.push_back(P);
+}
+
+void update()
+{
+    if (!movingObj.empty())
+    {
+        for (int i = 0; i < movingObj.size(); i++)
+        {
+            glPushMatrix();
+            Vector3d& p = movingObj[i].center;
+            glTranslatef(p.GetX(), p.GetY(), p.GetZ());
+            movingObj[i].Draw();
+            glPopMatrix();
+        }
+    }
+}
+
 //Render changes to the current Scene
 void renderScene(void) {
 
@@ -506,14 +533,18 @@ void renderScene(void) {
         }
     }
 
-  //Draw Polygons
-  for(int i=0; i<(int)polys.size(); i++) 
-  {
-    polys[i].Draw();
-  }
+    cout << movingObj.size() << endl;
 
-  //Update to the current frame
-  glutSwapBuffers();
+    update();
+
+    //Draw Polygons
+    for(int i=0; i < (int)polys.size(); i++) 
+    {
+        polys[i].Draw();
+    }
+
+    //Update to the current frame
+    glutSwapBuffers();
 }
 
 //When a Key is pressed determine what needs to be done
@@ -698,6 +729,9 @@ void menu(int num)
             slowDown = true;
         }
         break;
+    case 13:
+        MakeSonic();
+        break;
     }
 
     glutPostRedisplay();
@@ -720,11 +754,14 @@ void createMenu(void)
     submenu_CamSpeed_id = glutCreateMenu(menu);
     glutAddMenuEntry("Fast", 11);
     glutAddMenuEntry("Slow", 12);
+    submenu_Sim_id = glutCreateMenu(menu);
+    glutAddMenuEntry("Sonic Running", 13);
     menu_id = glutCreateMenu(menu);
     glutAddMenuEntry("Clear", 1);
     glutAddSubMenu("Draw", submenu_Draw_id);
     glutAddSubMenu("Environments", submenu_Scene_id);
     glutAddSubMenu("Camera Speed", submenu_CamSpeed_id);
+    glutAddSubMenu("Simulations", submenu_Sim_id);
     glutAddMenuEntry("Quit", 0);
     glutAttachMenu(GLUT_RIGHT_BUTTON);
 }

@@ -16,6 +16,7 @@ public:
   Vector3d center;
   double rotY;
   Vector3d color;
+  Vector3d vel;
 };
 
 #endif
